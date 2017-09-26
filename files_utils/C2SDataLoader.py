@@ -11,6 +11,7 @@ from isoweek import Week
 from datetime import date, timedelta
 import datetime
 import sys, traceback
+from commons.Utils import Utils
 
 
   
@@ -121,37 +122,8 @@ class C2SDataLoader:
     def insertNewWeek(self, weekString):        
 
         print(time.strftime("%d/%m/%Y %H:%M:%S"), "Début calculs préalables à l'insertion d'une nouvelle semaine c2s_week_stkb", weekString)  
-        annee = int(weekString[:4])        
-        # on récupère le numéro de la semaine
-        sem = int(weekString[-2:])    
-
-        # Etant donné un numéro de semaine il faut retourner le numéro de semaine qui
-        # le précède
-        # prevWeek =  
-        # 
-        
-        week = Week(annee, sem)
-        lundi = week.monday()
-
-        #on récupère le dimanche
-        #
-        dimanchePrecedent = lundi + timedelta(days=-1)
-
-        previousYear = dimanchePrecedent.strftime("%Y")
-
-        if(int(previousYear) == annee):
-            if(sem - 1) <= 9:
-                prevWeekString = previousYear+"0"+str(sem - 1)
-            else:
-                prevWeekString = previousYear+str(sem-1)
-        
-        else:
-            prevWeekNum = dimanchePrecedent.isocalendar()[1]
-
-            if prevWeekNum <= 9:
-                prevWeekString = previousYear + "0"+ str(prevWeekNum)
-            else:
-                prevWeekString = previousYear+str(prevWeekNum) 
+       
+        prevWeekString = Utils.getPrevWeekString(weekString)
 
         print(time.strftime("%d/%m/%Y %H:%M:%S"), "Fin des calculs préalables à l'insertion d'une nouvelle semaine c2s_week_stkb", weekString)
 

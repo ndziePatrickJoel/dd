@@ -246,6 +246,9 @@ class C2CSTKPDataLoader:
         year = int(monthString[:4])
         month = int(monthString[-2:])
 
+        sessionFactory = SessionFactory()
+        session = sessionFactory.Session()
+
         if(month == 1): # si nous sommes au premier mois il y a aucune initialisation à faire toutes les valeurs sont à 0
              monthC2C = self.getC2CMoisValues(monthString)
              c2cToAdd = []
@@ -278,7 +281,7 @@ class C2CSTKPDataLoader:
                     monthC2C[key].evolutionM1 = monthC2C[key].c2c - previousMonthC2C[key].c2c
                         #calculer les points de présence
                        #calculer les points d'évolution
-                newMonthC2S.append(monthC2S[key])
+                newMonthC2C.append(monthC2C[key])
             
 
             # a la fin de la boucle on a les C2S mensuels avec les valeurs 
@@ -288,9 +291,7 @@ class C2CSTKPDataLoader:
             
             #calculer les points de présence
             #calculer les points d'évolution
-        sessionFactory = SessionFactory()
-        session = sessionFactory.Session()
-        
+
         try:
             print(time.strftime("%d/%m/%Y %H:%M:%S"), "Début insertion ")
             session.add_all(newMonthC2C)
@@ -317,6 +318,9 @@ class C2CSTKPDataLoader:
         year = int(monthString[:4])
         month = int(monthString[-2:])
 
+        sessionFactory = SessionFactory()
+        session = sessionFactory.Session()
+
         numDays = calendar.monthrange(year, month)[1]
         days = [datetime.date(year, month, day) for day in range(1, numDays + 1)]
         jours = []
@@ -327,7 +331,7 @@ class C2CSTKPDataLoader:
         c2cMonth = dict()
         for jour in jours:            
             c2cJourStkps = session.query(DDC2CJourSTKP).filter_by(jour = jour)
-            for c2cJour in c2cJourStkbs:
+            for c2cJour in c2cJourStkps:
                 if(c2cJour.stkpMsisdn not in c2cMonth):                    
                     tmpC2c = DDC2CMoisSTKP(c2cJour) 
                     tmpC2c.mois = monthString                           
@@ -335,7 +339,9 @@ class C2CSTKPDataLoader:
                     c2cMonth[c2cJour.stkpMsisdn] = tmpC2c
                 tmp = c2cMonth[c2cJour.stkpMsisdn]
                 tmp.c2c = tmp.c2c + c2cJour.c2c
-        return c2sMonth
+                c2cMonth[c2cJour.stkpMsisdn] = tmp
+        session.close()
+        return c2cMonth
 
 
     def view_traceback(self):

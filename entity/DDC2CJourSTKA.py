@@ -27,12 +27,22 @@ class DDC2CJourSTKA(Base):
     objectifC2c = Column(Float(), name="objectif_c2c")
     
 
-    def __init__(self, *args):
+    def __init__(self, stkp = None):
         """Si on passe à __init__ un ou plusieurs arguments, le premier doit être une ligne contenant la liste des informations valables
-        pour un stkb"""        
+        pour un stkb"""   
+
+        if stkp != None:
+            self.stkaName = stkp.stkaName
+            self.partnerName = stkp.partnerName
+            self.partnerId = stkp.partnerId
+            self.zonePMO = stkp.zonePMO
+            self.regionCom = stkp.regionCom
+            self.regionAdm = stkp.regionAdm
+            self.acvi = stkp.acvi
+            self.c2c = 0    
 
     def __repr__(self):
-            return "(id='%s', stkpMsisdn = '%s', stkaMsisdn = '%s', c2c = '%s', stkaName = '%s') " % (self.id, self.stkpMsisdn, self.stkaMsisdn, self.c2c, self.stkaName)
+            return "(id='%s',  stkaMsisdn = '%s', c2c = '%s', stkaName = '%s') " % (self.id, self.stkaMsisdn, self.c2c, self.stkaName)
 
     def initFromRow(self, row):
         """Cette fonction permet d'initialiser un élément avec une ligne contenue dans le fichier brute,

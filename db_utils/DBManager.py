@@ -23,10 +23,10 @@ class SessionFactory(metaclass=Singleton):
 
     def __init__(self):        
     
-        engine = create_engine('mysql+pymysql://beetoo:beetoo@172.21.86.226/dashabord_dd_new?charset=utf8')
+        self.engine = create_engine('mysql+pymysql://beetoo:beetoo@172.21.86.226/dashabord_dd_new?charset=utf8')
 
         #print(engine.encoding)
-        self.Session  = sessionmaker(bind = engine)
+        self.Session  = sessionmaker(bind = self.engine)
 
         #on instantie une session
 
@@ -35,4 +35,8 @@ class SessionFactory(metaclass=Singleton):
         session = self.Session()
 
         return session
+
+    def getConnection(self):
+        
+        return self.engine.connect()
     

@@ -3,53 +3,50 @@
 from sqlalchemy import Column, String, Integer, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+import random
 
 
 Base = declarative_base()
 
 
-class DDC2CMoisSTKP(Base):
-    __tablename__ = 'dd_c2c_mois_stkp'
+class DDC2CSemSTKA(Base):
+    __tablename__ = 'dd_c2c_sem_stka'
     id = Column(Integer, primary_key=True, name="id")
-    mois =  Column(String(),  name="mois")
-    stkpMsisdn = Column(String(), name="stkp_msisdn")
+    sem =  Column(String(),  name="sem")
     quartierCom = Column(String(), name="quartier_com")
     stkaName = Column(String(), name="stka_name")
     stkaMsisdn = Column(String(), name="stka_msisdn")
     partnerName = Column(String(), name="partner_name")
-    partnerId = Column(Integer(), name="partner_id")
+    partnerId = Column(String(), name="partner_id")
     zonePMO = Column(String(), name="zone_pmo")
     regionCom = Column(String(), name="region_com")
     regionAdm = Column(String(), name="region_adm")
     acvi = Column(String(), name="acvi")
     c2c = Column(Float(), name="c2c")
-    c2cMoins1 = Column(Float(), name="c2c_m_1")
-    evolutionM1 = Column(Float(), name="evol_m_1")
+    c2cS1 = Column(Float(), name="c2c_s_1")
+    evolS1 = Column(Float(), name="evol_s_1")    
+    sem = Column(Float(), name="sem")
     objectifC2c = Column(Float(), name="objectif_c2c")
-
     
 
-
-
-    def __init__(self, stkpDay = None):
+    def __init__(self, stkp = None):
         """Si on passe à __init__ un ou plusieurs arguments, le premier doit être une ligne contenant la liste des informations valables
-        pour un stkb"""
-        if  stkpDay != None:
-            self.quartierCom = stkpDay.quartierCom
-            self.route = stkpDay.route
-            self.stkpMsisdn = stkpDay.stkpMsisdn
-            self.stkaName = stkpDay.stkaName
-            self.stkaMsisdn = stkpDay.stkaMsisdn
-            self.partnerName = stkpDay.partnerName
-            self.partnerId = stkpDay.partnerId
-            self.zonePMO = stkpDay.zonePMO
-            self.regionCom = stkpDay.regionCom
-            self.regionAdm = stkpDay.regionAdm
-            self.acvi = stkpDay.acvi            
-            
+        pour un stkb"""   
+
+        if stkp != None:
+            self.stkaName = stkp.stkaName
+            self.partnerName = stkp.partnerName
+            self.partnerId = stkp.partnerId
+            self.zonePMO = stkp.zonePMO
+            self.regionCom = stkp.regionCom
+            self.regionAdm = stkp.regionAdm
+            self.acvi = stkp.acvi
+            self.c2c = 0
+            self.sem = stkp.sem
+            self.stkaMsisdn = stkp.stkaMsisdn    
 
     def __repr__(self):
-            return "(id='%s', stkbMsisdn = '%s')> " % (self.id, self.stkbMsisdn)
+            return "(id='%s',  stkaMsisdn = '%s', c2c = '%s', stkaName = '%s') " % (self.id, self.stkaMsisdn, self.c2c, self.stkaName)
 
     def initFromRow(self, row):
         """Cette fonction permet d'initialiser un élément avec une ligne contenue dans le fichier brute,

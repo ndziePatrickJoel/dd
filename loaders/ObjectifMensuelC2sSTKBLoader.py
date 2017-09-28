@@ -6,8 +6,18 @@ from entity.DDObjectifMensuelC2sSTKB import DDObjectifMensuelC2sSTKB
 from entity.DDObjectifMensuelC2sSTKP import DDObjectifMensuelC2sSTKP
 from entity.DDObjectifMensuelC2sSTKA import DDObjectifMensuelC2sSTKA
 from entity.DDObjectifMensuelC2sZonePMO import DDObjectifMensuelC2sZonePMO
-from entity.DDObjectifMensuelC2sregionAdm import DDObjectifMensuelC2sregionAdm
+from entity.DDObjectifMensuelC2sRegionAdm import DDObjectifMensuelC2sRegionAdm
 from entity.DDObjectifMensuelC2sRegionCom import DDObjectifMensuelC2sRegionCom
+from entity.DDObjectifMensuelPartnerZonePMO import DDObjectifMensuelPartnerZonePMO
+from entity.DDObjectifMensuelPartnerRegionAdm import DDObjectifMensuelPartnerRegionAdm
+from entity.DDObjectifMensuelPartnerRegionCom import DDObjectifMensuelPartnerRegionCom
+from entity.DDObjectifMensuelPartner import DDObjectifMensuelPartner
+from entity.DDObjectifMensuelACVI import DDObjectifMensuelACVI
+from entity.DDObjectifMensuelACVIZonePMO import DDObjectifMensuelACVIZonePMO
+from entity.DDObjectifMensuelACVIRegionAdm import DDObjectifMensuelACVIRegionAdm
+from entity.DDObjectifMensuelACVIRegionCom import DDObjectifMensuelACVIRegionCom
+
+
 import time
 import calendar
 from db_utils.DBManager import SessionFactory
@@ -212,7 +222,7 @@ class ObjectifMensuelC2sSTKBLoader:
         #01082017
                         
         connection = sessionFactory.getConnection()
-        requete = "select  region_com, region_adm, mois, acvi, zone_pmo sum(objectif) objectif from dd_objectif_mensuel_c2s_stkb where mois = '"+month+"' GROUP BY zone_pmo"
+        requete = "select  region_com, region_adm, mois, acvi, zone_pmo, sum(objectif) objectif from dd_objectif_mensuel_c2s_stkb where mois = '"+month+"' GROUP BY zone_pmo"
         result = connection.execute(requete);
 
         for row in result:
@@ -247,7 +257,7 @@ class ObjectifMensuelC2sSTKBLoader:
         result = connection.execute(requete);
 
         for row in result:
-            tmpElt = DDObjectifMensuelC2sregionAdm(row) 
+            tmpElt = DDObjectifMensuelC2sRegionAdm(row) 
             print(tmpElt)     
             data.append(tmpElt)
         connection.close()  
@@ -278,10 +288,9 @@ class ObjectifMensuelC2sSTKBLoader:
         result = connection.execute(requete);
 
         for row in result:
-            tmpElt = DDObjectifMensuelC2sregionCom(row) 
-            print(tmpElt)     
+            tmpElt = DDObjectifMensuelC2sRegionCom(row) 
             data.append(tmpElt)
-        connection.close()  
+        connection.close()
 
         session = sessionFactory.Session()
         try:
@@ -295,6 +304,263 @@ class ObjectifMensuelC2sSTKBLoader:
         finally:
             session.close()
             print(time.strftime("%d/%m/%Y %H:%M:%S"), "Session close")
+
+    def insertObjectifsMensuelPartnerZonePMO(self, month):
+        
+        sessionFactory = SessionFactory()
+        
+        data = []
+
+        #01082017
+                        
+        connection = sessionFactory.getConnection()
+        requete = "select  partner_name, partner_id, region_com, region_adm, zone_pmo, mois,  sum(objectif) objectif from dd_objectif_mensuel_c2s_stkb where mois = '"+month+"' GROUP BY partner_id, zone_pmo"
+        result = connection.execute(requete);
+
+        for row in result:
+            tmpElt = DDObjectifMensuelPartnerZonePMO(row) 
+            print(tmpElt)     
+            data.append(tmpElt)
+        connection.close()
+
+        session = sessionFactory.Session()
+        try:
+            session.add_all(data)
+            session.commit()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Fin insertion avec succès")  
+        except Exception as ex:
+            self.view_traceback()
+            session.rollback()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Fin insertion avec erreur, rollback fait!")  
+        finally:
+            session.close()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Session close")
+
+    
+    def insertObjectifsMensuelPartnerRegionAdm(self, month):
+        
+        sessionFactory = SessionFactory()
+        
+        data = []
+
+        #01082017
+                        
+        connection = sessionFactory.getConnection()
+        requete = "select  partner_name, partner_id, region_com, region_adm, mois,  sum(objectif) objectif from dd_objectif_mensuel_c2s_stkb where mois = '"+month+"' GROUP BY partner_id, region_adm"
+        result = connection.execute(requete);
+
+        for row in result:
+            tmpElt = DDObjectifMensuelPartnerRegionAdm(row) 
+            print(tmpElt)     
+            data.append(tmpElt)
+        connection.close()
+
+        session = sessionFactory.Session()
+        try:
+            session.add_all(data)
+            session.commit()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Fin insertion avec succès")  
+        except Exception as ex:
+            self.view_traceback()
+            session.rollback()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Fin insertion avec erreur, rollback fait!")  
+        finally:
+            session.close()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Session close")
+
+
+    def insertObjectifsMensuelPartnerRegionCom(self, month):
+        
+        sessionFactory = SessionFactory()
+        
+        data = []
+
+        #01082017
+                        
+        connection = sessionFactory.getConnection()
+        requete = "select  partner_name, partner_id, region_com, mois,  sum(objectif) objectif from dd_objectif_mensuel_c2s_stkb where mois = '"+month+"' GROUP BY partner_id, region_com"
+        result = connection.execute(requete);
+
+        for row in result:
+            tmpElt = DDObjectifMensuelPartnerRegionCom(row) 
+            print(tmpElt)     
+            data.append(tmpElt)
+        connection.close()
+
+        session = sessionFactory.Session()
+        try:
+            session.add_all(data)
+            session.commit()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Fin insertion avec succès")  
+        except Exception as ex:
+            self.view_traceback()
+            session.rollback()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Fin insertion avec erreur, rollback fait!")  
+        finally:
+            session.close()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Session close")
+
+
+    def insertObjectifsMensuelPartner(self, month):
+        
+        sessionFactory = SessionFactory()
+        
+        data = []
+
+        #01082017
+                        
+        connection = sessionFactory.getConnection()
+        requete = "select  partner_name, partner_id, mois,  sum(objectif) objectif from dd_objectif_mensuel_c2s_stkb where mois = '"+month+"' GROUP BY partner_id"
+        result = connection.execute(requete);
+
+        for row in result:
+            tmpElt = DDObjectifMensuelPartner(row) 
+            print(tmpElt)     
+            data.append(tmpElt)
+        connection.close()
+
+        session = sessionFactory.Session()
+        try:
+            session.add_all(data)
+            session.commit()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Fin insertion avec succès")  
+        except Exception as ex:
+            self.view_traceback()
+            session.rollback()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Fin insertion avec erreur, rollback fait!")  
+        finally:
+            session.close()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Session close")
+
+
+    def insertObjectifsMensuelACVIZonePMO(self, month):
+        
+        sessionFactory = SessionFactory()
+        
+        data = []
+
+        #01082017
+                        
+        connection = sessionFactory.getConnection()
+        requete = "select  acvi, region_com, region_adm, zone_pmo, mois,  sum(objectif) objectif from dd_objectif_mensuel_c2s_stkb where mois = '"+month+"' GROUP BY acvi, zone_pmo"
+        result = connection.execute(requete);
+
+        for row in result:
+            tmpElt = DDObjectifMensuelACVIZonePMO(row) 
+            print(tmpElt)     
+            data.append(tmpElt)
+        connection.close()
+
+        session = sessionFactory.Session()
+        try:
+            session.add_all(data)
+            session.commit()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Fin insertion avec succès")  
+        except Exception as ex:
+            self.view_traceback()
+            session.rollback()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Fin insertion avec erreur, rollback fait!")  
+        finally:
+            session.close()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Session close")  
+
+    def insertObjectifsMensuelACVIRegionAdm(self, month):
+        
+        sessionFactory = SessionFactory()
+        
+        data = []
+
+        #01082017
+                        
+        connection = sessionFactory.getConnection()
+        requete = "select  acvi, region_com, region_adm, mois,  sum(objectif) objectif from dd_objectif_mensuel_c2s_stkb where mois = '"+month+"' GROUP BY acvi, region_adm"
+        result = connection.execute(requete);
+
+        for row in result:
+            tmpElt = DDObjectifMensuelACVIRegionAdm(row) 
+            print(tmpElt)     
+            data.append(tmpElt)
+        connection.close()
+
+        session = sessionFactory.Session()
+        try:
+            session.add_all(data)
+            session.commit()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Fin insertion avec succès")  
+        except Exception as ex:
+            self.view_traceback()
+            session.rollback()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Fin insertion avec erreur, rollback fait!")  
+        finally:
+            session.close()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Session close")  
+
+    
+    def insertObjectifsMensuelACVIRegionCom(self, month):
+        
+        sessionFactory = SessionFactory()
+        
+        data = []
+
+        #01082017
+                        
+        connection = sessionFactory.getConnection()
+        requete = "select  acvi, region_com, mois,  sum(objectif) objectif from dd_objectif_mensuel_c2s_stkb where mois = '"+month+"' GROUP BY acvi, region_com"
+        result = connection.execute(requete);
+
+        for row in result:
+            tmpElt = DDObjectifMensuelACVIRegionCom(row) 
+            print(tmpElt)     
+            data.append(tmpElt)
+        connection.close()
+
+        session = sessionFactory.Session()
+        try:
+            session.add_all(data)
+            session.commit()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Fin insertion avec succès")  
+        except Exception as ex:
+            self.view_traceback()
+            session.rollback()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Fin insertion avec erreur, rollback fait!")  
+        finally:
+            session.close()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Session close") 
+
+
+    def insertObjectifsMensuelACVI(self, month):
+        
+        sessionFactory = SessionFactory()
+        
+        data = []
+
+        #01082017
+                        
+        connection = sessionFactory.getConnection()
+        requete = "select  acvi, mois,  sum(objectif) objectif from dd_objectif_mensuel_c2s_stkb where mois = '"+month+"' GROUP BY acvi"
+        result = connection.execute(requete);
+
+        for row in result:
+            tmpElt = DDObjectifMensuelACVI(row) 
+            print(tmpElt)     
+            data.append(tmpElt)
+        connection.close()
+
+        session = sessionFactory.Session()
+        try:
+            session.add_all(data)
+            session.commit()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Fin insertion avec succès")  
+        except Exception as ex:
+            self.view_traceback()
+            session.rollback()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Fin insertion avec erreur, rollback fait!")  
+        finally:
+            session.close()
+            print(time.strftime("%d/%m/%Y %H:%M:%S"), "Session close") 
+
+
+
 
 
     

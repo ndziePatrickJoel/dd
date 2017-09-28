@@ -12,13 +12,13 @@ from db_utils.DBManager import SessionFactory
 Base = declarative_base()
 
 
-class DDObjectifMensuelC2sSTKB(Base):
+class DDObjectifMensuelC2sRegionAdm(Base):
     
 
 
     _DATE_FORMAT = "%d/%m/%Y"
     
-    __tablename__ = 'dd_objectif_mensuel_c2s_region_adm'
+    __tablename__ = 'dd_objectif_mensuel_region_adm'
     id = Column(Integer, primary_key=True, name="id")
     mois =  Column(String(),  name="mois")
     regionCom = Column(String(), name="region_com")

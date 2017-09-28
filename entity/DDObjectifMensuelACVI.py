@@ -10,19 +10,16 @@ from datetime import datetime, date, timedelta
 Base = declarative_base()
 
 
-class DDObjectifMensuelC2sZonePMO(Base):
+class DDObjectifMensuelACVI(Base):
     
 
 
     _DATE_FORMAT = "%d/%m/%Y"
     
-    __tablename__ = 'dd_objectif_mensuel_zone_pmo'
+    __tablename__ = 'dd_objectif_mensuel_acvi'
     id = Column(Integer, primary_key=True, name="id")
-    mois =  Column(String(),  name="mois")
-    zonePMO = Column(String(), name="zone_pmo")
-    regionCom = Column(String(), name="region_com")
-    regionAdm = Column(String(), name="region_adm")
     acvi = Column(String(), name="acvi")
+    mois =  Column(String(),  name="mois")
     objectif = Column(Float(), name="objectif")
     
 
@@ -31,16 +28,12 @@ class DDObjectifMensuelC2sZonePMO(Base):
         pour un stkb"""
 
         if(row != None):    
-            self.acvi = row['acvi']
-            self.zonePMO = row['zone_pmo']
-            self.regionCom = row['region_com']
-            self.regionAdm = row['region_adm']
             self.mois = row['mois']
-            self.objectif = row['objectif']                     
-                  
+            self.objectif = row['objectif'] 
+            self.acvi = row['acvi']                  
 
     def __repr__(self):
-            return "(id='%s', zonePMO = '%s', regionCom = '%s', objectif = '%s')> " % (self.id, self.zonePMO, self.regionCom, self.objectif)
+            return "(id='%s', acvi = '%s', mois = '%s', objectif = '%s')> " % (self.id, self.acvi, self.mois, self.objectif)
 
     def initFromRow(self, row):
         """Cette fonction permet d'initialiser un élément avec une ligne contenue dans le fichier brute,

@@ -95,11 +95,23 @@ jours = ['02/09/2017', '02/09/2017', '03/09/2017', '04/09/2017', '05/09/2017', '
 loader = ObjectifMensuelC2sSTKBLoader()
 
 #loadDataLocally(self, fileLocation, mois, lignesZebra)
-#objectifs = loader.loadDataLocally("objectifs_stkb_201709.csv", "201709",mappingsZebra)
+#objectifs = loader.loadDataLocally("objectifs_stkb_201709.csv", "201708",mappingsZebra)
 
 #loader.saveObjectifMensuelSTKB(objectifs)
+#loader.insertObjectifsMensuelSTKP("201708")
+#loader.insertObjectifsMensuelSTKA("201708")
+#loader.insertObjectifsMensuelZonePMO("201708")
+#loader.insertObjectifsMensuelRegionAdm("201708")
+#loader.insertObjectifsMensuelRegionCom("201708")
 
-loader.insertObjectifsMensuelZonePMO("201709")
-loader.insertObjectifsMensuelRegionAdm("201709")
-loader.insertObjectifsMensuelRegionCom("201709")
+loader.insertObjectifsMensuelPartnerZonePMO("201709");
+loader.insertObjectifsMensuelPartnerRegionAdm("201709")
+loader.insertObjectifsMensuelPartnerRegionCom("201709")
+
+loader.insertObjectifsMensuelPartner("201709")
+
+loader.insertObjectifsMensuelACVIZonePMO("201709")
+loader.insertObjectifsMensuelACVIRegionAdm("201709")
+loader.insertObjectifsMensuelACVIRegionCom("201709")
+loader.insertObjectifsMensuelACVI("201709")
 

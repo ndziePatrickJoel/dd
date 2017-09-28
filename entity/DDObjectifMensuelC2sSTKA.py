@@ -18,7 +18,7 @@ class DDObjectifMensuelC2sSTKA(Base):
 
     _DATE_FORMAT = "%d/%m/%Y"
     
-    __tablename__ = 'dd_objectif_mensuel_c2s_stka'
+    __tablename__ = 'dd_objectif_mensuel_stka'
     id = Column(Integer, primary_key=True, name="id")
     mois =  Column(String(),  name="mois")
     stkaMsisdn = Column(String(), name="stka_msisdn")
